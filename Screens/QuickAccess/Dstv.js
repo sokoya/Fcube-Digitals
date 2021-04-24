@@ -28,7 +28,8 @@ class DstvScreen extends Component {
          showsuccess:false,
        dataplanId:'',
       userPhoneError:'',
-      Product_Code:'',
+      ProductCode:'',
+      productToken:'',
       Amount:'',
 
        /////////////
@@ -95,6 +96,7 @@ Hide= ()=>{
      this.setState({Amount:Array[0]})
       this.setState({Product_Code:Array[1]})
       this.setState({show:true})
+    
    }
     HandleMakechanges = async ()=>{
  await this.props.Clearsatalliteerror();
@@ -115,8 +117,8 @@ Hide= ()=>{
 
 
   const id = await AsyncStorage.getItem('id');
-
-   await this.props.multichoiceVending("dstv",userPhone,this.state.Product_Code,plan.productCode,id,this.state.Amount)
+console.log(plan.productToken);
+   await this.props.multichoiceVending("dstv",userPhone,plan.productToken,plan.productCode,id,this.state.Amount)
  this.props.multichoice_vending_success? this.setState({showsuccess:true}):''
     };
 
@@ -153,12 +155,12 @@ Hide= ()=>{
        <View>
       <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Smart Card Number : {this.state.userPhone}</Text></View>
 
-      <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Account Name : {plan.customer_smart_card_name}</Text></View>
+      <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Account Name : {plan.customer_name}</Text></View>
 
       
     {this.state.show?<View style ={Styles.FormGroup}>
       <Text style={Styles.Label2}>Amount : {'\u20A6' + this.state.Amount}</Text>
-      <Text style={Styles.Label2}>Product_Code : { this.state.Product_Code}</Text>
+
       </View>:<Text></Text>}<View style={Styles.FormGroup}>  
         <Text style={Styles.Label}>Select Package </Text>
          <View  style={[ this.state.dataplanIdHasError? Styles.hasError:{borderColor:"black", borderWidth:0.8, borderRadius:5}]}> 
