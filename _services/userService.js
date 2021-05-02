@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import {API_URL} from '../_helper/config';
@@ -154,19 +155,19 @@ async function multichoiceVending(
 }
 
 async function StartimesVending(
-  multichoice_type,
-  smart_card_no,
-  product_code,
+  phone,
+  plan,
+  productToken,
   productCode,
   user_id,
   amount,
 ) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/startimes/payment`, {
-        multichoice_type,
-        smart_card_no,
-        product_code,
+      .post(`${API_URL}/pay_startimes`, {
+        phone,
+        plan,
+        productToken,
         amount,
         productCode,
         user_id,
@@ -181,41 +182,38 @@ async function StartimesVending(
       });
   });
 }
-async function Validatestartimes(smart_card_no) {
+async function Validatestartimes(account, amount) {
+  //alert(account) amou
+
+  amount ="0";
   return new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/validate/startimes`, {smart_card_no})
+      .post(`${API_URL}/validate_startimes`, {account, amount})
       .then(async (response) => {
-        //console.log(response.data.message)
+        console.log(response.data.message)
         resolve(response);
       })
       .catch((err) => reject(err));
   });
 }
 
-async function Validateie(meter_type, meter_number) {
+async function ValidateElectricity(meter_type, meter_number, disco, amount) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/electricity/validate/ie`, {meter_type, meter_number})
+      .post(`${API_URL}/validate_electricity`, {
+        meter_type,
+        meter_number,
+        disco,
+        amount,
+      })
       .then(async (response) => {
-        console.log(response.data.message);
+        //console.log(response.data.message);
         resolve(response);
       })
       .catch((err) => reject(err));
   });
 }
 
-async function Validateeko(meter_type, meter_number) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/validate/ekedc`, {meter_type, meter_number})
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
 
 async function GetTransaction(user_id) {
   return new Promise((resolve, reject) => {
@@ -229,59 +227,13 @@ async function GetTransaction(user_id) {
   });
 }
 
-async function ValidateAbuja(meter_type, meter_number) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/validate/abuja`, {meter_type, meter_number})
-      .then(async (response) => {
-        // console.log(response.data.message)
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-async function ValidateIbadan(meter_type, meter_number) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/validate/ibedc`, {meter_type, meter_number})
-      .then(async (response) => {
-        //  console.log(response.data.message)
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-
-async function ValidateEnugu(meter_type, meter_number) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/validate/eedc`, {meter_type, meter_number})
-      .then(async (response) => {
-        //  console.log(response.data.message)
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-
-async function ValidateePh(meter_type, meter_number) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/validate/phed`, {meter_type, meter_number})
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
 
 async function Buydata(phone_number, network, plan, user_id) {
   return new Promise((resolve, reject) => {
     axios
       .post(
         `${API_URL}/data`,
-        {user_id, network, plan, network, phone_number},
+        {user_id, network, plan, phone_number},
         headers,
       )
       .then(async (response) => {
@@ -313,12 +265,18 @@ async function BuyAirtime(network, user_id, amount, phone_number) {
   });
 }
 
-async function VendElectricity(network, user_id, amount, phone_number) {
+async function Pay_Electricity(
+  user_id,
+  phone,
+  productCode,
+  productToken,
+) {
+
   return new Promise((resolve, reject) => {
     axios
       .post(
-        `${API_URL}/airtime`,
-        {network, amount, phone_number, user_id},
+        `${API_URL}/pay_electricity`,
+        { phone, user_id, productCode, productToken},
         headers,
       )
       .then(async (response) => {
@@ -331,121 +289,6 @@ async function VendElectricity(network, user_id, amount, phone_number) {
   });
 }
 
-async function PayAbuja(meter_type, meter_number, amount, user_id) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/payment/a22c`, {
-        meter_type,
-        meter_number,
-        amount,
-        user_id,
-      })
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-async function PayIbadan(
-  meter_type,
-  meter_number,
-  amount,
-  user_id,
-  product_code,
-) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/payment/ibedc`, {
-        meter_type,
-        meter_number,
-        amount,
-        user_id,
-        product_code,
-      })
-      .then(async (response) => {
-        //  console.log(response.data.message)
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-
-async function PayEnugu(
-  meter_type,
-  meter_number,
-  amount,
-  user_id,
-  product_code,
-) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/payment/eedc`, {
-        meter_type,
-        meter_number,
-        amount,
-        user_id,
-        product_code,
-      })
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-
-async function PayPh(meter_type, meter_number, amount, user_id, product_code) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/payment/phed`, {
-        meter_type,
-        meter_number,
-        amount,
-        user_id,
-        product_code,
-      })
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-
-async function Payie(meter_type, meter_number, amount, user_id) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/payment/ie`, {
-        meter_type,
-        meter_number,
-        amount,
-        user_id,
-      })
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
-
-async function Payeko(meter_type, meter_number, amount, user_id) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(`${API_URL}/electricity/payment/ekedc`, {
-        meter_type,
-        meter_number,
-        amount,
-        user_id,
-      })
-      .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
-      })
-      .catch((err) => reject(err));
-  });
-}
 
 async function GetBalance(user_id) {
   return new Promise((resolve, reject) => {
@@ -519,20 +362,15 @@ async function changepassword(
 
 export const userService = {
   login,
+  Pay_Electricity,
   Validatemultichoice,
   Validatestartimes,
-  Validateie,
   initiateBanktransfer,
   getnotification,
   logout,
-  ValidateAbuja,
+
   multichoiceVending,
-  PayEnugu,
-  Payeko,
-  PayPh,
-  PayIbadan,
-  Payie,
-  PayAbuja,
+ 
   CreateUser,
   StartimesVending,
   BuyAirtime,
@@ -541,10 +379,8 @@ export const userService = {
   VerifyPaystack,
   changepassword,
   GetdataPlan,
-  ValidateePh,
-  ValidateIbadan,
-  ValidateEnugu,
-  Validateeko,
+
   GetTransaction,
   Register,
+  ValidateElectricity,
 };

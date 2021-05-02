@@ -12,7 +12,9 @@ const INITIAL_STATE = {
   transactionhistory:[],
   paymentloading:false,
   paymentsuccess:false,
-  product_code:''
+  code:'',
+
+
 
 }
 
@@ -64,9 +66,9 @@ loading:true,
        ...state,
         loading:false,
         name:action.payload.customer_name,
-        token:action.payload.token,
+        token:action.payload.productToken,
         fsuccess:true,
-        product_code:action.payload.product_code
+        code:action.payload.productCode
      };
 
      case FETCH_TRANS:

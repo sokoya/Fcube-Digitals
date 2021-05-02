@@ -3,16 +3,16 @@ import { userService } from "../../_services/userService";
 import { CLEAR_SATALLITE_ERROR, FETCH_MULTICHOICE, FETCH_STARTTIMES, FETCH_SUCCESS, LOADING_SATALLITE, MULTICHOICE_VENDING_ERROR, MULTICHOICE_VENDING_LOADING, MULTICHOICE_VENDING_SUCCESS, SET_MULTICHOICE_ERROR, SET_SATALLITE_ERROR, SET_STARTIMES_ERROR } from "../constants/index";
 
 
- export const ValidateStartimes = (smart_card_no) =>  async (dispatch)=>{
+ export const ValidateStartimes = (account) =>  async (dispatch)=>{
   dispatch(Clearsatalliteerror());
   dispatch(LoadingData());
-  userService.Validatestartimes(smart_card_no).then( async (response)=>{
-    // console.log(response.data.message.details)
+  userService.Validatestartimes(account).then( async (response)=>{
+    //console.log(response.data.message.details)
     dispatch(DispatchStartime(response.data.message.details));
           
           })
           .catch((err)=>{
-          
+         // console.log(err);
           dispatch(SetStartimeerror(errorParser.parseStartimesError(err).message));
            
           });
@@ -38,10 +38,25 @@ import { CLEAR_SATALLITE_ERROR, FETCH_MULTICHOICE, FETCH_STARTTIMES, FETCH_SUCCE
  };
 
 
- export const StartimesVending =(multichoice_type,smart_card_no,product_code,productCode,user_id, amount)=> async (dispatch)=>{
-  
+ export const StartimesVending =(
+    phone,
+  plan,
+  productToken,
+  productCode,
+  user_id,
+  amount,)=> async (dispatch)=>{
+  console.log("phone " + phone);
+  console.log( "plan " + plan);
+  console.log( "code " + productCode);
+  console.log( "token " + productToken);
+  console.log(user_id);
   dispatch(Loadingmultichiocepament())
-  userService.StartimesVending(multichoice_type,smart_card_no,product_code,productCode,user_id,amount).
+  userService.StartimesVending( phone,
+    plan,
+    productToken,
+    productCode,
+    user_id,
+    amount,).
    then( async(response)=>{
 
     dispatch(DispatchMultichoicevendingsuccess(response.data.message))
