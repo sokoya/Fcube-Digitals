@@ -2,7 +2,8 @@
 /* eslint-disable no-lone-blocks */
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable prettier/prettier */
-
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Feather from 'react-native-vector-icons/Feather';
 import React, { Component } from 'react';
 import { View, TextInput, Text, StyleSheet, Image, Alert } from 'react-native';
 import { connect } from 'react-redux';
@@ -27,6 +28,9 @@ cardno:'',carderror:'',cardHaserror:false,
         /////////////
         dataplanIdHasError:false,
          userPhone:'',
+         planname:'',
+         showsuccess:false,
+         package:[],
     show:false,
        dataplanId:[],
       userPhoneError:'',
@@ -111,9 +115,18 @@ cardno:'',carderror:'',cardHaserror:false,
         this.setState({dataplanIdHasError:true});
         return false;
       }
-      this.setState({dataplanId:value});
+      this.setState({package:value});
+      this.setState({dataplanId:value.cycles});
+      this.setState({planname:value.name});
       this.setState({show:true});
    }
+   Hide= ()=>{
+this.setState({showsuccess:false});
+this.props.Clearsatalliteerror();
+    this.props.navigation.navigate('LoginScreen');
+    this.props.navigation.navigate('First');
+
+  }
     HandleMakechanges = async ()=>{
  await this.props.Clearsatalliteerror();
     }
@@ -131,7 +144,7 @@ cardno:'',carderror:'',cardHaserror:false,
         }
         const user_id = await AsyncStorage.getItem('id');
 
-       await this.props.StartimesVending(userPhone,this.state.Cycle,plan.productToken,plan.productCode,user_id,Amount);
+       await this.props.StartimesVending(userPhone,this.state.planname,plan.productToken,plan.productCode,user_id,this.state.Cycle);
      // await this.props.StartimesVending(userPhone,this.state.Product_Code,this.props.plan.productCode,id,this.state.Amount);
       this.props.vending_success ? this.setState({showsuccess:true}) : '';
 
@@ -172,13 +185,13 @@ cardno:'',carderror:'',cardHaserror:false,
         <Text style={Styles.Label}>Select Package </Text>
          <View  style={[ this.state.dataplanIdHasError ? Styles.hasError : {borderColor:'black', borderWidth:0.8, borderRadius:5}]}>
         <Picker
-        selectedValue={ this.state.dataplanId}
+        selectedValue={ this.state.package}
           onValueChange={(itemValue, itemIndex) => this.HandleSelect(itemValue)}
 
         >
           <Picker.Item label="Select Package" value=""/>
           {
-         plan.bouquets.map((item, index)=>(<Picker.Item key={index}  label ={ item.name} value={item.cycles}  />
+         plan.bouquets.map((item, index)=>(<Picker.Item key={index}  label ={ item.name} value={item}  />
 
     ))}</Picker></View><Text style={{color:'red'}}>{this.state.dataplanIdError}</Text>
 
@@ -190,9 +203,9 @@ cardno:'',carderror:'',cardHaserror:false,
 
         >
           <Picker.Item label="Select Package" value=""/>
-         <Picker.Item  label ={'Daily ' + '------' + '\u20A6' + this.state.dataplanId.daily} value={this.state.dataplanId.daily}  />
-         <Picker.Item  label ={'Weekly  '  + '------' + '\u20A6' + this.state.dataplanId.weekly } value={this.state.dataplanId.weekly}  />
-         <Picker.Item  label ={'Monthly' + '------' + '\u20A6' +  this.state.dataplanId.monthly } value={this.state.dataplanId.monthly}  />
+         <Picker.Item  label ={'Daily ' + '------' + '\u20A6' + this.state.dataplanId.daily} value="daily"  />
+         <Picker.Item  label ={'Weekly  '  + '------' + '\u20A6' + this.state.dataplanId.weekly } value="weekly"  />
+         <Picker.Item  label ={'Monthly' + '------' + '\u20A6' +  this.state.dataplanId.monthly } value="monthly" />
     </Picker></View><Text style={{color:'red'}}>{this.state.dataplanIdError}</Text>
 
 
@@ -256,6 +269,54 @@ cardno:'',carderror:'',cardHaserror:false,
         </View>
 
       }
+
+  
+
+<View>
+    
+     
+<AwesomeAlert style={{
+
+modalContainer:{backgroundColor:'green'},
+}}
+show={this.props.vending_success}
+
+showProgress={true}
+useNativeDriver={true}
+
+customView={ <View>
+  <Text>
+    <Feather
+  style={{color:'green', padding:10}}
+             name="check-circle"
+             color="green"
+             size={50}
+       />
+        </Text>
+
+        </View>}
+message={' Transaction Successful !'}
+closeOnTouchOutside={false}
+closeOnHardwareBackPress={false}
+showCancelButton={false}
+showConfirmButton={true}
+
+fontSize = {20}
+messageStyle= {{  color:'green', textAlign:'center', fontSize:18, padding:10}}
+titleStyle={{fontSize:25, padding:0, margin:0}}
+
+
+contentContainerStyle={{width:400 }}
+cancelText="No, cancel"
+confirmText="OK, Proceed"
+confirmButtonColor="green"
+
+onConfirmPressed={() => {
+  this.Hide();
+}}
+/>
+    </View>
+
         </View>
         );
 

@@ -1,17 +1,19 @@
 
+  
 import React, { Component } from "react";
 import { View, TextInput, Text, StyleSheet, Image, Alert } from "react-native";
 import { connect } from "react-redux";
-import { ValidateGotv, Clearsatalliteerror, multichoiceVending} from "../../Redux/Actions/Satallite.action";
+import { ValidateDstv, Clearsatalliteerror, ValidateGotv, multichoiceVending} from "../../Redux/Actions/Satallite.action";
 import { Picker } from "@react-native-community/picker";
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { ValidateEmptyField, ValidatePhone } from "../../_helper/Validation";
 import Loader from "../../Component/Loader";
 import SuccessAlert from "../../Component/SuccessAlert";
-import AwesomeAlert from 'react-native-awesome-alerts';
-import Feather from 'react-native-vector-icons/Feather';
 import {widthPercentageToDP as wp , heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import AsyncStorage from "@react-native-community/async-storage";
+import AwesomeAlert from 'react-native-awesome-alerts';
+import Feather from 'react-native-vector-icons/Feather';
+import NavigationService from "../../_services/Navigation.service";
 class GotvScreen extends Component {
  
     constructor(props){
@@ -23,11 +25,12 @@ class GotvScreen extends Component {
 
         /////////////
         dataplanIdHasError:false, 
-        userPhone:'',
-        showsuccess:false,
+         userPhone:'',
+         showsuccess:false,
        dataplanId:'',
       userPhoneError:'',
-      Product_Code:'',
+      ProductCode:'',
+      productToken:'',
       Amount:'',
 
        /////////////
@@ -36,12 +39,15 @@ class GotvScreen extends Component {
       this.HandleMakechanges()
     }
 
-    Hide= ()=>{
+Hide= ()=>{
 
-      this.props.navigation.navigate('LoginScreen');
-      this.props.navigation.navigate('First');
-    
-    }
+
+  this.props.Clearsatalliteerror();
+  this.props.navigation.navigate('LoginScreen');
+  this.props.navigation.navigate('First');
+
+
+}
     handlephone= (value)=>{
         this.setState({userPhoneError:''});
         this.setState({userPhoneHasError:false});
@@ -93,12 +99,14 @@ class GotvScreen extends Component {
      this.setState({Amount:Array[0]})
       this.setState({Product_Code:Array[1]})
       this.setState({show:true})
+    
    }
     HandleMakechanges = async ()=>{
  await this.props.Clearsatalliteerror();
     }
     HandleMakepayment = async ()=>{
-      const {plan, loading,loadingpayment, success,errorMgs} = this.props;
+
+      const {plan, loading, success,errorMgs} = this.props;
       const {userPhone, dataplanId} = this.state
       this.setState({dataplanIdError:''});
       this.setState({dataplanIdHasError:false});
@@ -110,21 +118,27 @@ class GotvScreen extends Component {
           return false;
         }
 
-      const id = await AsyncStorage.getItem('id')
-      await this.props.multichoiceVending("gotv",userPhone,this.state.Product_Code,plan.productCode,id,this.state.Amount)
-      this.props.multichoice_vending_success? this.setState({showsuccess:true}):''
 
+  const id = await AsyncStorage.getItem('id');
+console.log(plan.productToken);
+   await this.props.multichoiceVending("gotv",userPhone,plan.productToken,plan.productCode,id,this.state.Amount)
+ this.props.multichoice_vending_success? this.setState({showsuccess:true}):''
     };
+
 
     render(){
 
-      const {plan, loading,loadingpayment, success,errorMgs} = this.props;
-      global.currentScreenIndex = 'HomeScreen';
+        const {plan, loading,loadingpayment,vending_success, success,errorMgs} = this.props;
+     
+        global.currentScreenIndex = 'HomeScreen';
         return(
+
+        
             <ScrollView style={Styles.Container}>
-              <Loader message="Processing Your Transaction.." loading={loadingpayment} />
+
+<Loader message="Processing Your Transaction.." loading={loadingpayment} />
                 <Loader message="Validating Your Smart Card Number" loading={loading} />
-            
+              
                 <Text style={{color:'red', textAlign:"center", fontSize:20, marginTop:10}}>{errorMgs}</Text>
         <View style ={Styles.FormGroup}>
         <View style={{ alignItems: 'center' }}>
@@ -144,12 +158,12 @@ class GotvScreen extends Component {
        <View>
       <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Smart Card Number : {this.state.userPhone}</Text></View>
 
-      <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Account Name : {plan.customer_smart_card_name}</Text></View>
+      <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Account Name : {plan.customer_name}</Text></View>
 
       
     {this.state.show?<View style ={Styles.FormGroup}>
       <Text style={Styles.Label2}>Amount : {'\u20A6' + this.state.Amount}</Text>
-      <Text style={Styles.Label2}>Product_Code : { this.state.Product_Code}</Text>
+
       </View>:<Text></Text>}<View style={Styles.FormGroup}>  
         <Text style={Styles.Label}>Select Package </Text>
          <View  style={[ this.state.dataplanIdHasError? Styles.hasError:{borderColor:"black", borderWidth:0.8, borderRadius:5}]}> 
@@ -160,7 +174,7 @@ class GotvScreen extends Component {
         >
           <Picker.Item label="Select Package" value=""/>
           {
-         plan.bouquets.map((item, index)=>(<Picker.Item key={index} label ={ item.name + "----- "  +'\u20A6' + item.amount } value={item.amount +','+ item.product_code}  />
+         plan.bouquets.map((item, index)=>(<Picker.Item key={index} label ={ item.name + " ----- "  +'\u20A6' + item.amount } value={item.amount +','+ item.product_code}  />
 
     ))}</Picker></View><Text style={{color:'red'}}>{this.state.dataplanIdError}</Text></View> 
 
@@ -204,6 +218,7 @@ class GotvScreen extends Component {
          ><Text style= {Styles.nextText}>Validate Smart Card </Text></TouchableOpacity>
         </View></View>
 
+
       }
 
 <View>
@@ -213,7 +228,7 @@ class GotvScreen extends Component {
     
       modalContainer:{backgroundColor:'green'}, 
     }}
-      show={success}
+      show={vending_success}
       
       showProgress={true}
       useNativeDriver={true}
@@ -251,7 +266,6 @@ class GotvScreen extends Component {
     />
     </View>
 
-
         </ScrollView>
         )
 
@@ -261,17 +275,16 @@ class GotvScreen extends Component {
 
 function MapStateToProps(state){
     return{
-      plan:state.sat.multichoice_plan   ,
+      plan:state.sat.multichoice_plan  ,
       success:state.sat.multichoice_plan_success,
       errorMgs:state.sat.multichoice_error,
-      loading:state.sat.loading ,
-
+      loading:state.sat.loading,
       vending_success:state.sat.multichoice_vending_success ,
       loadingpayment:state.sat.paymentloading
     };
 }
 
-export default connect( MapStateToProps, {ValidateGotv , multichoiceVending, Clearsatalliteerror})(GotvScreen);
+export default connect( MapStateToProps, {ValidateDstv, ValidateGotv , multichoiceVending, Clearsatalliteerror})(GotvScreen);
 
 const Styles= StyleSheet.create({
 

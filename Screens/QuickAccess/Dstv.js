@@ -40,6 +40,8 @@ class DstvScreen extends Component {
 
 Hide= ()=>{
 
+
+  this.props.Clearsatalliteerror();
   this.props.navigation.navigate('LoginScreen');
   this.props.navigation.navigate('First');
 
@@ -125,7 +127,7 @@ console.log(plan.productToken);
 
     render(){
 
-        const {plan, loading,loadingpayment, success,errorMgs} = this.props;
+        const {plan, loading,loadingpayment,vending_success, success,errorMgs} = this.props;
      
         global.currentScreenIndex = 'HomeScreen';
         return(
@@ -221,46 +223,46 @@ console.log(plan.productToken);
 <View>
     
      
-    <AwesomeAlert style={{
-    
-      modalContainer:{backgroundColor:'green'}, 
-    }}
-      show={this.state.showsuccess}
-      
-      showProgress={true}
-      useNativeDriver={true}
-    
-      customView={ <View>
-        <Text>
-          <Feather 
-        style={{color:'green', padding:10}} 
-                   name="check-circle"
-                   color="green"
-                   size={50}
-             />
-              </Text>
-              
-              </View>}
-      message="Transaction Successfull"
-      closeOnTouchOutside={false}
-      closeOnHardwareBackPress={false}
-      showCancelButton={false}
-      showConfirmButton={true}
-    
-      fontSize = {20}
-      messageStyle= {{  color:'green', textAlign:'center', fontSize:18, padding:10}}
-      titleStyle={{fontSize:25, padding:0, margin:0}}
-      
-    
-      contentContainerStyle={{width:400 }}
-      cancelText="No, cancel"
-      confirmText="OK, Proceed"
-      confirmButtonColor="green"
+<AwesomeAlert style={{
 
-      onConfirmPressed={() => {
-        this.Hide()
-      }}
-    />
+modalContainer:{backgroundColor:'green'},
+}}
+show={vending_success}
+
+showProgress={true}
+useNativeDriver={true}
+
+customView={ <View>
+  <Text>
+    <Feather
+  style={{color:'green', padding:10}}
+             name="check-circle"
+             color="green"
+             size={50}
+       />
+        </Text>
+
+        </View>}
+message={' Transaction Successful'}
+closeOnTouchOutside={false}
+closeOnHardwareBackPress={false}
+showCancelButton={false}
+showConfirmButton={true}
+
+fontSize = {20}
+messageStyle= {{  color:'green', textAlign:'center', fontSize:18, padding:10}}
+titleStyle={{fontSize:25, padding:0, margin:0}}
+
+
+contentContainerStyle={{width:400 }}
+cancelText="No, cancel"
+confirmText="OK, Proceed"
+confirmButtonColor="green"
+
+onConfirmPressed={() => {
+  this.Hide();
+}}
+/>
     </View>
 
         </ScrollView>

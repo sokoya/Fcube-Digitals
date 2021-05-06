@@ -160,7 +160,7 @@ async function StartimesVending(
   productToken,
   productCode,
   user_id,
-  amount,
+  cycle,
 ) {
   return new Promise((resolve, reject) => {
     axios
@@ -168,12 +168,12 @@ async function StartimesVending(
         phone,
         plan,
         productToken,
-        amount,
+        cycle,
         productCode,
         user_id,
       })
       .then(async (response) => {
-        console.log(response.data.message);
+      //  console.log(response.data.message);
         resolve(response);
       })
       .catch((err) => {
