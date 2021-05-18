@@ -19,7 +19,7 @@ import {
 import { ValidateEmptyField, ValidateNumber, ValidatePhone } from '../../_helper/Validation';
 import { connect } from 'react-redux';
 
-import{ BuyAirtime, ClearErrorMgs} from '../../Redux/Actions/Data.action'
+import{ BuyAirtime, ClearErrorMgs, FetchAirtime} from '../../Redux/Actions/Data.action'
 
 import AwesomeAlert from 'react-native-awesome-alerts';
 import Loader from '../../Component/Loader';
@@ -41,15 +41,21 @@ Network:'', NetworkError:'',NetworkHasError:false,
 
         };
     };
- componentDidMount(props){  this.props.ClearErrorMgs()}
+ componentDidMount(props){  this.props.ClearErrorMgs();  this.Loadaitime();}
     Hide= ()=>{
 
-     // this.setState({showsuccess:false})
+
       this.props.navigation.navigate('LoginScreen');
       this.props.navigation.navigate('First');
-    //  NavigationService.navigate('First')
+    
       
     
+    }
+
+
+    Loadaitime= async ()=>{
+      const id = await AsyncStorage.getItem('id')
+      await this.props.FetchAirtime("airtime",id);
     }
 HandleBuyAirtime = async() =>{
 const {loading, errorMgs, success} = this.props
@@ -130,13 +136,11 @@ const id = await AsyncStorage.getItem('id')
              style={[styles.inputStyle, this.state.PhoneNumberHasError? styles.HasError:'']}
           
                onChangeText={userPhone =>  this.setState({PhoneNumber:userPhone})}
-               underlineColorAndroid="#FFFFFF"
+           
                placeholder="Enter Phone Number" 
                placeholderTextColor="grey"
-               autoCapitalize="none"
-               keyboardType="numeric"
-              
-               returnKeyType="next"
+          
+            
             
              
         />
@@ -260,12 +264,13 @@ function MapStateToProp(state){
     successMgs:state.dat.successMgs,
   success:state.dat.airtimesuccess,
   loading:state.dat.airtimeloading,
-  errorMgs:state.dat.errorMgs
+  errorMgs:state.dat.errorMgs,
+  package:state.dat.airtimepackage
   }
 
 }
 
-export default connect(  MapStateToProp,{BuyAirtime, ClearErrorMgs})(BuyairtimeScreen);
+export default connect(  MapStateToProp,{BuyAirtime, FetchAirtime, ClearErrorMgs})(BuyairtimeScreen);
 
 
 const styles = StyleSheet.create({

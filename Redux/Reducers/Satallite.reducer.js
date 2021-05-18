@@ -124,6 +124,17 @@ export default function( state= INITIAL_STATE, action) {
               startime_error:action.payload,
               
   
+            };
+
+            case CLEAR_SATALLITE_ERROR:
+            
+            return {
+              ...state, 
+              loading:false,
+
+
+              multichoice_vending_success:false,
+              startimes_vending_success:false
             }
 
      default: return state;

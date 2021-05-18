@@ -35,6 +35,7 @@ class DstvScreen extends Component {
        /////////////
        userPhoneHasError:false, };
     componentDidMount(props){
+      this.props.Clearsatalliteerror();
       this.HandleMakechanges()
     }
 
@@ -119,8 +120,8 @@ Hide= ()=>{
 
 
   const id = await AsyncStorage.getItem('id');
-console.log(plan.productToken);
-   await this.props.multichoiceVending("dstv",userPhone,plan.productToken,plan.productCode,id,this.state.Amount)
+
+  await this.props.multichoiceVending("dstv",userPhone,plan.productToken,plan.productCode,id,this.state.Amount)
  this.props.multichoice_vending_success? this.setState({showsuccess:true}):''
     };
 

@@ -77,14 +77,15 @@ this.setState({showdetails:false})
  { 
   this.state.showdetails && this.state.index === index ?
  
- <Row style={{padding:10, margin:10, backgroundColor:'grey',}}> 
+ <Row style={{padding:10, margin:10, backgroundColor:'black',}}> 
  
- <Col style={{width:wp('7')}}><TouchableOpacity  style={{ backgroundColor:'lightgrey', marginRight:2, padding:1}}
+ <Col style={{width:wp('7')}}><TouchableOpacity  style={{ backgroundColor:'lightgrey',marginRight:2, padding:5}}
      onPress={() => this.Closedetails()}
          >
-         <Text style= {{ fontSize:18, color:'red',}}>
+         <Text style= {{ fontSize:28, color:'red',}}>
            x
          </Text>
+
        </TouchableOpacity></Col>
  <Col style={{width:wp('40')}}>
  <Row style={{height:hp('5')}}><Text style={Styles.datacell}>Transaction ID</Text></Row>
@@ -108,25 +109,21 @@ this.setState({showdetails:false})
    </Col>
  
  </Row>:
- 
- <Row style={{padding:10, margin:10, backgroundColor:'grey',}}> 
- <Col style={{width:wp('5')}}><TouchableOpacity 
-     onPress={() => this.Showdetails(index)}
-         >
-         <Text style= {{ fontSize:20, color:'white'}}>
-          +
-         </Text>
-       </TouchableOpacity></Col>
+ <TouchableOpacity 
+ onPress={() => this.Showdetails(index)}
+     >
+ <Row style={{padding:10, margin:10, backgroundColor:'grey'}}> 
+ <Col style={{width:wp('5')}}><Text style={Styles.datacell}> + </Text></Col>
  <Col style={{width:wp('30')}}><Text style={Styles.datacell}>{item.trans_id}</Text></Col>
    <Col style={{width:wp('17')}}><Text style={Styles.datacell}>{ item.amount}.00 </Text></Col>
  
- <Col style={{width:wp('35')}}>
+ <Col style={{width:wp('37')}}>
   <Text style={Styles.datacell}>{ item.date_initiated}</Text>
  
   </Col>
  
  </Row>
-  
+ </TouchableOpacity>
  }
    </Grid>
  ))
@@ -183,7 +180,7 @@ LoanHistoryBorder:{ height:hp('80'),
 },
 LoanBalance:{marginLeft:20},
 datacell:{
-color:'white', fontSize:11,
+color:'white', fontSize:12,
 textAlign:"center"
 },
 Paid:{  backgroundColor:'green', borderRadius:15, marginRight:5},

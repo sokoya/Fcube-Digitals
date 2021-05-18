@@ -74,7 +74,7 @@ account1:'',account2:'',Errormgs:'',
  }
 
 
-   await this.props.BankTransfer(this.props.navigation.state.params.Amount, paymentmode, )
+   await this.props.BankTransfer(this.props.navigation.state.params.Amount, paymentmode,this.props.navigation.state.params.Id )
  /// add request to dn 
 
  this.setState({success:true})
@@ -83,9 +83,9 @@ account1:'',account2:'',Errormgs:'',
     render(){
       
       var radio_props = [
-        {label:[this.state.bankname,"\n", this.state.accountname,"\n", this.state.accountnumber],value:"Standard Chartered Bank Nigeria Ltd"},
-        {label: [this.state.account1],value:"ACCESS BANK"} ,
-        {label: [this.state.account2],value:" Providus Bank (Instant Funding)"} 
+     //   {label:[this.state.bankname,"\n", this.state.accountname,"\n", this.state.accountnumber],value:"Standard Chartered Bank Nigeria Ltd"},
+        {label: [this.state.account1],value: this.state.account1} ,
+        {label: [this.state.account2],value: this.state.account2} 
       ];
 
       const { loading, register_suc,register_fail, errortext} = this.props;

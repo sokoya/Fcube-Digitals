@@ -162,7 +162,7 @@ class LoginScreen extends Component {
                       }
                       placeholder="Enter Email "
                       placeholderTextColor="grey"
-                      autoCapitalize="none"
+                  
 
                       //   blurOnSubmit={false}
                     />

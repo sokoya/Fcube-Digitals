@@ -23,10 +23,11 @@ import { CLEAR_SATALLITE_ERROR, FETCH_MULTICHOICE, FETCH_STARTTIMES, FETCH_SUCCE
  export const multichoiceVending =(multichoice_type,smart_card_no,product_code,productCode,user_id, cycle)=> async (dispatch)=>{
   
   dispatch(Loadingmultichiocepament())
-  userService.multichoiceVending(multichoice_type,smart_card_no,product_code,productCode,user_id,amount).
+  
+  userService.multichoiceVending(multichoice_type,smart_card_no,product_code,productCode,user_id,cycle).
    then( async(response)=>{
 
-    dispatch(DispatchMultichoicevendingsuccess(response.data.message))
+    dispatch(DispatchMultichoicevendingsuccess("ok"))
 
 
    }).catch((err)=>{

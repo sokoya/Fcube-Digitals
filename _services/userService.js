@@ -135,7 +135,7 @@ async function multichoiceVending(
 ) {
   return new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/multichoice/payment`, {
+      .post(`${API_URL}/paymultichoice`, {
         multichoice_type,
         smart_card_no,
         product_code,
@@ -316,8 +316,25 @@ async function VerifyPaystack(amount, user_id, reference) {
 
 async function initiateBanktransfer(amount, user_id, bank) {
   return new Promise((resolve, reject) => {
+    console.log(amount);
+    console.log(user_id);
+    console.log(bank);
     axios
       .post(`${API_URL}/initiate_bank_transfer`, {amount, user_id, bank})
+      .then(async (response) => {
+        console.log(response.data.message);
+        resolve(response);
+      })
+      .catch((err) => reject(err));
+  });
+}
+
+
+async function ListAirtime(network_type, user_id) {
+  return new Promise((resolve, reject) => {
+
+    axios
+      .post(`${API_URL}/networks`, {network_type, user_id})
       .then(async (response) => {
         console.log(response.data.message);
         resolve(response);
@@ -368,7 +385,7 @@ export const userService = {
   initiateBanktransfer,
   getnotification,
   logout,
-
+ListAirtime,
   multichoiceVending,
  
   CreateUser,
