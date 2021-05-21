@@ -1,6 +1,6 @@
 import { errorParser } from "../../_services/apiErrorParser";
 import { userService } from "../../_services/userService";
-import { AIRTIME_VENDING_ERROR, AIRTIME_VENDING_LOADING, AIRTIME_VENDING_SUCCESS, BANK_TRANSFER_ERROR, BANK_TRANSFER_LOADING, BANK_TRANSFER_SUCCESS, CLEAR_ERROR, DATA_VENDING_ERROR, DATA_VENDING_LOADING, DATA_VENDING_SUCCESS, FETCH_AIRTIME_SUCCESS, FETCH_SUCCESS, NOTIFICATION_SUCCESS, VERIFY_PAYSTACK_SUCCESS } from "../constants/index";
+import { AIRTIME_VENDING_ERROR, AIRTIME_VENDING_LOADING, AIRTIME_VENDING_SUCCESS, BANK_TRANSFER_ERROR, BANK_TRANSFER_LOADING, BANK_TRANSFER_SUCCESS, CLEAR_ERROR, DATA_VENDING_ERROR, DATA_VENDING_LOADING, DATA_VENDING_SUCCESS, FETCH_AIRTIME_SUCCESS, FETCH_ELE_SUCCESS, FETCH_SUCCESS, FETCH_TV_SUCCESS, NOTIFICATION_SUCCESS, VERIFY_PAYSTACK_SUCCESS } from "../constants/index";
 import { SetStartimeerror } from "./Satallite.action";
 
 
@@ -162,7 +162,7 @@ export const BankTransfer=(amount,bank,user_id)=> async(dispatch)=>{
 
    userService.ListAirtime(network_type, user_id) 
    .then( async (response)=>{
-      console.log(response.data.message)
+      //console.log(response.data.message)
       dispatch(FethAirtime(response.data.message.details))
    
    })
@@ -174,6 +174,38 @@ export const BankTransfer=(amount,bank,user_id)=> async(dispatch)=>{
    
    }
 
+
+   export const FetchElectricity=(network_type, user_id)=> async(dispatch)=>{
+
+    userService.ListAirtime(network_type, user_id) 
+    .then( async (response)=>{
+    
+       dispatch(Fethelectricity(response.data.message.details))
+    
+    })
+    .catch((err)=>{
+    
+      dispatch(BankTransfererror())
+    
+    });
+    
+    }
+   export const FetchTv=(network_type, user_id)=> async(dispatch)=>{
+
+    userService.ListAirtime(network_type, user_id) 
+    .then( async (response)=>{
+     
+       dispatch(FethTV(response.data.message.details))
+    
+    })
+    .catch((err)=>{
+    
+      dispatch(BankTransfererror())
+    
+    });
+    
+    }
+
  export const FethcData = data =>({
      type: FETCH_SUCCESS,
      payload:data
@@ -181,6 +213,16 @@ export const BankTransfer=(amount,bank,user_id)=> async(dispatch)=>{
 
  export const FethAirtime = data =>({
   type: FETCH_AIRTIME_SUCCESS,
+  payload:data
+});
+
+export const Fethelectricity = data =>({
+  type: FETCH_ELE_SUCCESS,
+  payload:data
+});
+
+export const FethTV = data =>({
+  type: FETCH_TV_SUCCESS,
   payload:data
 });
 

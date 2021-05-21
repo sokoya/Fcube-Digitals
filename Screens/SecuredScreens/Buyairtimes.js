@@ -41,7 +41,8 @@ Network:'', NetworkError:'',NetworkHasError:false,
 
         };
     };
- componentDidMount(props){  this.props.ClearErrorMgs();  this.Loadaitime();}
+ componentDidMount(props){ 
+    this.props.ClearErrorMgs();  this.Loadaitime();}
     Hide= ()=>{
 
 
@@ -99,7 +100,10 @@ const id = await AsyncStorage.getItem('id')
 
     }
     render(){
-      const {loading, errorMgs, success} = this.props
+
+   
+      const {loading, errorMgs, networkpackage, success} = this.props
+      console.log(networkpackage)
         return(
          
   <ScrollView style={styles.mainBody}>
@@ -159,11 +163,11 @@ const id = await AsyncStorage.getItem('id')
        onValueChange={(itemValue, itemIndex) => this.setState({Network:itemValue})}
        selectedValue={ this.state.Network}
         >
- <Picker.Item label=" Select Network Provider" value=""/>
-<Picker.Item label=" MTN" value="mtn"/>
-<Picker.Item label=" GLo" value="glo"/>
-<Picker.Item label=" AIRTEL" value="airtel"/>
-<Picker.Item label=" 9 MOBILE" value="9mobile"/>
+     {
+  
+     networkpackage.map((item, index)=>(<Picker.Item key={index} label ={ item.network_title } value={item.network_name} />
+
+))}
         </Picker></View><Text style={styles.Errortext}>{this.state.NetworkError}</Text></View> 
            
 
@@ -265,12 +269,14 @@ function MapStateToProp(state){
   success:state.dat.airtimesuccess,
   loading:state.dat.airtimeloading,
   errorMgs:state.dat.errorMgs,
-  package:state.dat.airtimepackage
+  networkpackage:state.dat.airtimepackage
   }
 
 }
 
-export default connect(  MapStateToProp,{BuyAirtime, FetchAirtime, ClearErrorMgs})(BuyairtimeScreen);
+export default connect(MapStateToProp,
+  {BuyAirtime, FetchAirtime, ClearErrorMgs}
+  )(BuyairtimeScreen);
 
 
 const styles = StyleSheet.create({

@@ -1,10 +1,12 @@
-import { AIRTIME_VENDING_ERROR, AIRTIME_VENDING_LOADING, AIRTIME_VENDING_SUCCESS, BANK_TRANSFER_ERROR, BANK_TRANSFER_LOADING, BANK_TRANSFER_SUCCESS, CLEAR_ERROR, DATA_VENDING_ERROR, DATA_VENDING_LOADING, DATA_VENDING_SUCCESS, FETCH_AIRTIME_SUCCESS, FETCH_SUCCESS, NOTIFICATION_SUCCESS, VERIFY_PAYSTACK_ERROR, VERIFY_PAYSTACK_SUCCESS } from "../constants/index";
+import { AIRTIME_VENDING_ERROR, AIRTIME_VENDING_LOADING, AIRTIME_VENDING_SUCCESS, BANK_TRANSFER_ERROR, BANK_TRANSFER_LOADING, BANK_TRANSFER_SUCCESS, CLEAR_ERROR, DATA_VENDING_ERROR, DATA_VENDING_LOADING, DATA_VENDING_SUCCESS, FETCH_AIRTIME_SUCCESS, FETCH_ELE_SUCCESS, FETCH_SUCCESS, FETCH_TV_SUCCESS, NOTIFICATION_SUCCESS, VERIFY_PAYSTACK_ERROR, VERIFY_PAYSTACK_SUCCESS } from "../constants/index";
 
 
 const INITIAL_STATE = {
   Dataplan:[],
   errorMgs:'',
   airtimepackage:[],
+  electricitypackage:[],
+  tvpackage:[],
   datasuccess:false,
   airtimesuccess:false,
   airtimeloading:false,
@@ -100,6 +102,19 @@ export default function( state= INITIAL_STATE, action) {
         airtimepackage:action.payload
      };
 
+     case  FETCH_TV_SUCCESS:
+
+     return {
+      ...state,
+        tvpackage:action.payload
+     };
+
+     case  FETCH_ELE_SUCCESS:
+
+     return {
+      ...state,
+        electricitypackage:action.payload
+     };
      case VERIFY_PAYSTACK_ERROR:
       return{
    ...state,

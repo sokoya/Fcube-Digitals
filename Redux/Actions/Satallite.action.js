@@ -20,11 +20,11 @@ import { CLEAR_SATALLITE_ERROR, FETCH_MULTICHOICE, FETCH_STARTTIMES, FETCH_SUCCE
  };
 
 
- export const multichoiceVending =(multichoice_type,smart_card_no,product_code,productCode,user_id, cycle)=> async (dispatch)=>{
+ export const multichoiceVending =(multichoice_type,smart_card_no, productToken,productCode,user_id, plan,phone)=> async (dispatch)=>{
   
   dispatch(Loadingmultichiocepament())
   
-  userService.multichoiceVending(multichoice_type,smart_card_no,product_code,productCode,user_id,cycle).
+  userService.multichoiceVending(multichoice_type,smart_card_no, productToken,productCode,user_id,plan,phone).
    then( async(response)=>{
 
     dispatch(DispatchMultichoicevendingsuccess("ok"))
@@ -72,7 +72,7 @@ import { CLEAR_SATALLITE_ERROR, FETCH_MULTICHOICE, FETCH_STARTTIMES, FETCH_SUCCE
   dispatch(Clearsatalliteerror());
   dispatch(LoadingData());
   userService.Validatemultichoice("dstv",smart_card_no).then( async (response)=>{
-
+    console.log(response.data.message);
     dispatch(DispatchMultichoice(response.data.message.details));
           
           })
@@ -87,6 +87,7 @@ import { CLEAR_SATALLITE_ERROR, FETCH_MULTICHOICE, FETCH_STARTTIMES, FETCH_SUCCE
    dispatch(Clearsatalliteerror());
    dispatch(LoadingData());
   userService.Validatemultichoice("gotv",smart_card_no).then( async (response)=>{
+    console.log(response.data.message);
     dispatch(DispatchMultichoice(response.data.message.details));
           
           })

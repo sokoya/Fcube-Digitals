@@ -3,6 +3,10 @@ import { View, TextInput, Text, StyleSheet, Image } from "react-native";
 import Feather from 'react-native-vector-icons/Feather';
 import {widthPercentageToDP as wp , heightPercentageToDP as hp} from 'react-native-responsive-screen'
 import { Picker } from "@react-native-community/picker";
+import AsyncStorage from '@react-native-community/async-storage';
+import { connect } from 'react-redux';
+
+import{ BuyAirtime, ClearErrorMgs,FetchElectricity,FetchTv, FetchAirtime} from '../../Redux/Actions/Data.action'
 
 class PaybillsScreen extends Component {
  
@@ -11,9 +15,55 @@ class PaybillsScreen extends Component {
 
         this.state ={navigateto:''};
     };
-    Handlenavigation = (value)=>{
 
-        this.props.navigation.navigate(value);
+    componentDidMount(props){ 
+      this.Loadelectricity();
+       this.Loadtv();}
+  
+   Loadelectricity= async ()=>{
+    const id = await AsyncStorage.getItem('id')
+    await this.props.FetchElectricity("electricity-bill",id);
+  }
+  
+      Loadtv= async ()=>{
+    
+    
+        const id = await AsyncStorage.getItem('id')
+        await this.props.FetchTv("tv-subscription",id);
+      }
+    Handlenavigation = (value)=>{
+      if(value == 15){
+        this.props.navigation.navigate("DstvScreen");
+      }
+      if(value == 16){
+        this.props.navigation.navigate("GotvScreen");
+      }
+
+      if(value == 25){
+        this.props.navigation.navigate("StartimeScreen");
+      }
+if(value == 17){
+  this.props.navigation.navigate("Ikeja");
+}
+
+if(value == 24){
+  this.props.navigation.navigate("Abuja");
+}
+
+if(value == 23){
+  this.props.navigation.navigate("Ibadan");
+}
+
+if(value == 21){
+  this.props.navigation.navigate("Ph");
+}
+if(value == 19){
+  this.props.navigation.navigate("Eko");
+}
+if(value == 20){
+  this.props.navigation.navigate("Enugu");
+}
+     
     }
 
     render(){
@@ -47,12 +97,11 @@ class PaybillsScreen extends Component {
         
         >
 <Picker.Item label=" Select Provider" value=""/>
-<Picker.Item label=" IKEJA ELECTRICITY" value="Ikeja"/>
-<Picker.Item label=" EKO ELECTRICITY" value="Eko"/>
-<Picker.Item label=" ABUJA ELECTRICITY" value="Abuja"/>
-<Picker.Item label=" PH ELECTRICITY" value="Ph"/>
-<Picker.Item label=" ENUGU ELECTRICITY" value="Enugu"/>
-<Picker.Item label=" IBADAN ELECTRICITY" value="Ibadan"/>
+{
+  
+  this.props.elepackage.map((item, index)=>(<Picker.Item key={index} label ={ item.network_title + " ( Discount  - "  +  item.network_discount  + " %) " } value={item.network_id} />
+
+))}
         </Picker></View>
         
         
@@ -70,10 +119,12 @@ class PaybillsScreen extends Component {
         
         >
           <Picker.Item label=" Select Provider" value=""/>
-<Picker.Item label=" DSTV SUBSCRIPION" value="DstvScreen"/>
-<Picker.Item label=" GOTV SUBSCRIPION" value="GotvScreen"/>
-<Picker.Item label=" START TIMES SUBSCRIPION" value="StartimeScreen"/>
 
+          {
+  
+  this.props.tvpackage.map((item, index)=>(<Picker.Item key={index} label ={ item.network_title + " ( Discount  - "  +  item.network_discount  + " %) "  } value={item.network_id } />
+
+))}
         </Picker></View><Text style={{color:'red'}}></Text></View>
            
 
@@ -82,10 +133,23 @@ class PaybillsScreen extends Component {
         )
 
     };
+    
 
 };
+function MapStateToProp(state){
 
-export default PaybillsScreen;
+  return{
+
+  tvpackage:state.dat.tvpackage,
+  elepackage:state.dat.electricitypackage,
+  }
+
+}
+
+export default connect(MapStateToProp,
+  {BuyAirtime, FetchElectricity,FetchTv, ClearErrorMgs}
+  )(PaybillsScreen);
+
 
 const styles = StyleSheet.create({
     mainBody: {

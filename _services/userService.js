@@ -128,20 +128,34 @@ async function Validatemultichoice(type, account) {
 async function multichoiceVending(
   multichoice_type,
   smart_card_no,
-  product_code,
+  productToken,
   productCode,
   user_id,
-  amount,
+  plan,phone
 ) {
+
+  console.log(multichoice_type)
+  console.log(smart_card_no)
+  console.log(productCode)
+
+  console.log(productToken)
+
+  console.log(user_id)
+  console.log(plan)
+  console.log(phone)
+
+
+
   return new Promise((resolve, reject) => {
     axios
-      .post(`${API_URL}/paymultichoice`, {
+      .post(`${API_URL}/pay_multichoice`, {
         multichoice_type,
         smart_card_no,
-        product_code,
-        amount,
+        productToken,
+        plan,
         productCode,
         user_id,
+        phone
       })
       .then(async (response) => {
         console.log(response.data.message);
@@ -289,7 +303,6 @@ async function Pay_Electricity(
   });
 }
 
-
 async function GetBalance(user_id) {
   return new Promise((resolve, reject) => {
     axios
@@ -329,15 +342,13 @@ async function initiateBanktransfer(amount, user_id, bank) {
   });
 }
 
-
 async function ListAirtime(network_type, user_id) {
   return new Promise((resolve, reject) => {
 
     axios
-      .post(`${API_URL}/networks`, {network_type, user_id})
+      .post(`${API_URL}/networks`, {network_type})
       .then(async (response) => {
-        console.log(response.data.message);
-        resolve(response);
+         resolve(response);
       })
       .catch((err) => reject(err));
   });

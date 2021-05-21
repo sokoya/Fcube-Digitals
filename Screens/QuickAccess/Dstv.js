@@ -21,7 +21,8 @@ class DstvScreen extends Component {
 
     state={
         dataplanIdError:'',
-
+//////
+cardno:'',carderror:'',cardHaserror:false,
         /////////////
         dataplanIdHasError:false, 
          userPhone:'',
@@ -48,6 +49,20 @@ Hide= ()=>{
 
 
 }
+
+handlecard= (value)=>{
+  this.setState({carderror:''});
+  this.setState({cardHaserror:false});
+  const Response33 = ValidateEmptyField('Smart Card Number',value);
+  if (Response33.isError === true){
+
+    this.setState({carderror:Response33.Errormgs});
+    this.setState({cardHaserror:true});
+    return false;
+  } else {
+  this.setState({disable:false});
+  this.setState({cardno:value});}
+};
     handlephone= (value)=>{
         this.setState({userPhoneError:''});
         this.setState({userPhoneHasError:false});
@@ -61,25 +76,37 @@ Hide= ()=>{
         this.setState({disable:false})
         this.setState({userPhone:value})}
       };
-    HandleValidatesmartcardno = async()=>{
-     
-        const {userPhone, dataplanId} = this.state
+      HandleValidatesmartcardno = async()=>{
+
+        const {userPhone,cardno} = this.state;
         this.setState({userPhoneError:''});
         this.setState({userPhoneHasError:false});
         this.setState({dataplanIdError:''});
         this.setState({dataplanIdHasError:false});
-        const Response3 =ValidateEmptyField("Smart Card Number",userPhone);
-        if(Response3.isError === true){
-          
-          this.setState({userPhoneError:Response3.Errormgs});
-          this.setState({userPhoneHasError:true});
+        this.setState({carderror:''});
+        this.setState({cardHaserror:false});
+        const Response3 = ValidateEmptyField('Smart Card Number',cardno);
+        if (Response3.isError === true){
+
+          this.setState({carderror:Response3.Errormgs});
+          this.setState({cardHaserror:true});
           return false;
-        
+
         }
 
-        await this.props.ValidateDstv(this.state.userPhone);
-      
-      
+        const Response33 = ValidateEmptyField('Phone Number',userPhone);
+        if (Response33.isError === true){
+
+          this.setState({userPhoneError:Response33.Errormgs});
+          this.setState({userPhoneHasError:true});
+          return false;
+
+        }
+
+
+        await this.props.ValidateDstv(cardno);
+
+
 
     };
    HandleSelect=(value)=>{
@@ -107,7 +134,7 @@ Hide= ()=>{
     HandleMakepayment = async ()=>{
 
       const {plan, loading, success,errorMgs} = this.props;
-      const {userPhone, dataplanId} = this.state
+      const {userPhone,cardno ,dataplanId} = this.state
       this.setState({dataplanIdError:''});
       this.setState({dataplanIdHasError:false});
         const Response =ValidateEmptyField("Package Plan", dataplanId);
@@ -121,7 +148,7 @@ Hide= ()=>{
 
   const id = await AsyncStorage.getItem('id');
 
-  await this.props.multichoiceVending("dstv",userPhone,plan.productToken,plan.productCode,id,this.state.Amount)
+  await this.props.multichoiceVending("dstv",cardno,plan.productToken,plan.productCode,id,this.state.Amount,userPhone)
  this.props.multichoice_vending_success? this.setState({showsuccess:true}):''
     };
 
@@ -156,13 +183,13 @@ Hide= ()=>{
 
             { success?
        <View>
-      <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Smart Card Number : {this.state.userPhone}</Text></View>
+      <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Smart Card Number : {this.state.cardno}</Text></View>
 
       <View style ={Styles.FormGroup}><Text style={Styles.Label2}>Account Name : {plan.customer_name}</Text></View>
 
       
     {this.state.show?<View style ={Styles.FormGroup}>
-      <Text style={Styles.Label2}>Amount : {'\u20A6' + this.state.Amount}</Text>
+ 
 
       </View>:<Text></Text>}<View style={Styles.FormGroup}>  
         <Text style={Styles.Label}>Select Package </Text>
@@ -174,7 +201,7 @@ Hide= ()=>{
         >
           <Picker.Item label="Select Package" value=""/>
           {
-         plan.bouquets.map((item, index)=>(<Picker.Item key={index} label ={ item.name + " ----- "  +'\u20A6' + item.amount } value={item.amount +','+ item.product_code}  />
+         plan.bouquets.map((item, index)=>(<Picker.Item key={index} label ={ item.name + " ----- "  +'\u20A6' + item.amount } value={item.plan +','+ item.product_code}  />
 
     ))}</Picker></View><Text style={{color:'red'}}>{this.state.dataplanIdError}</Text></View> 
 
@@ -199,26 +226,41 @@ Hide= ()=>{
             </Text>
           </TouchableOpacity>
     
-        </View></View>: <View>
-        <View style ={Styles.FormGroup}>
-         <Text style={Styles.Label}>Enter Smart Card Number</Text>
-
-         <TextInput style={[Styles.TextInput, this.state.userPhoneHasError?Styles.hasError:'']}
-            placeholder="    Smart Card Number"
-          onChangeText={Phone=>this.setState({userPhone:Phone})}
-          onChangeText= {ph=>this.handlephone(ph) }
-            placeholderTextColor="black"
-            keyboardType="numeric"
-            returnKeyType="next"
-         ></TextInput><Text style={{color:'red'}}>{this.state.userPhoneError}</Text>
-
-         <TouchableOpacity
-          onPress={this.HandleValidatesmartcardno}
-          style={ [Styles.nextButton, {marginTop:hp('5')}]}  
-         ><Text style= {Styles.nextText}>Validate Smart Card </Text></TouchableOpacity>
-        </View></View>
-
-
+        </View></View>: 
+         <View>
+         <View style ={Styles.FormGroup}>
+          <Text style={Styles.Label}>Enter Smart Card Number</Text>
+ 
+          <TextInput style={[Styles.TextInput, this.state.cardHaserror ? Styles.hasError : '']}
+             placeholder="    Smart Card Number"
+           onChangeText={card=>this.setState({cardno:card})}
+           onChangeText= {cd=>this.handlecard(cd) }
+             placeholderTextColor="black"
+             keyboardType="numeric"
+             returnKeyType="next"
+           /><Text style={{color:'red'}}>{this.state.carderror}</Text>
+    </View>
+ 
+ 
+    <View style ={Styles.FormGroup}>
+          <Text style={Styles.Label}>Enter Phone Number</Text>
+ 
+          <TextInput style={[Styles.TextInput, this.state.userPhoneHasError ? Styles.hasError : '']}
+             placeholder="    Phone Number"
+           onChangeText={Phone=>this.setState({userPhone:Phone})}
+           onChangeText= {ph=>this.handlephone(ph) }
+             placeholderTextColor="black"
+             keyboardType="numeric"
+             returnKeyType="next"
+           /><Text style={{color:'red'}}>{this.state.userPhoneError}</Text>
+          <TouchableOpacity
+           onPress={this.HandleValidatesmartcardno}
+           style={ [Styles.nextButton, {marginTop:hp('5')}]}
+          ><Text style= {Styles.nextText}>Validate Smart Card </Text></TouchableOpacity>
+       </View>
+ 
+         </View>
+      
       }
 
 <View>

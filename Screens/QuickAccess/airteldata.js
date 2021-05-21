@@ -30,7 +30,7 @@ class AirteldataScreen extends Component {
        /////////////
        userPhoneHasError:false, };
     componentDidMount(props){
-   c
+   
      this.getdataplan();
     }
 
