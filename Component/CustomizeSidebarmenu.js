@@ -88,6 +88,11 @@ class CustomSidebarMenu  extends Component {
     {navOptionName: 'Loan History',
     screenToNavigate:'HistoryScreen'
   }
+
+  ,
+    {navOptionName: 'Support',
+    screenToNavigate:'SupportScreen'
+  }
   ];
 
 
@@ -311,7 +316,37 @@ class CustomSidebarMenu  extends Component {
           </Text>
         </View>
  
+    
+        <View
+          
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 20,
+            color: 'white',
+            borderBottomWidth:1,
+            borderBottomColor:'white',
+            backgroundColor:
+              global.currentScreenIndex === "SupportScreen"
+                ? 'white'
+                : '#282828',
+          }}
+       
+          onStartShouldSetResponder={() =>
+            handleClick(2, "SupportScreen")
+          }>
+            <Text style={[stylesSidebar.ListText,  global.currentScreenIndex === "SupportScreen"? stylesSidebar.ActiveListText:'']}>
+      <Feather
+    name="user"
 
+    size={20}
+    /> </Text>
+     <Text style={[stylesSidebar.ListText,  global.currentScreenIndex === "SupportScreen"? stylesSidebar.ActiveListText:'']}>
+             Support
+        
+          </Text>
+        </View>
+ 
 
         <AwesomeAlert
           show={showAlert}

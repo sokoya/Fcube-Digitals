@@ -10,7 +10,7 @@ import MtndataScreen from '../Screens/QuickAccess/mtndata';
 import BuyairtimeScreen from '../Screens/SecuredScreens/Buyairtimes';
 import BuydataScreen from '../Screens/SecuredScreens/Buydata';
 import PaybillsScreen from '../Screens/SecuredScreens/Paybills';
-
+import SupportScreen from '../Screens/SecuredScreens/support';
 import GlodataScreen from '../Screens/QuickAccess/Glodata';
 import EtisalatdataScreen from '../Screens/QuickAccess/Etisalatdata';
 
@@ -31,6 +31,7 @@ import EditprofileScreen from '../Screens/SecuredScreens/Editprofile';
 import fundewallet from '../Screens/SecuredScreens/fundwallet';
 import Bankdetail from '../Screens/SecuredScreens/Bankdetail';
 import Paystack from '../Screens/QuickAccess/Paystack';
+import support from '../Screens/SecuredScreens/support';
 
 
 
@@ -361,6 +362,21 @@ const BuyAirtimeStack = createStackNavigator({
 
 });
 
+const SupportStack = createStackNavigator({
+  First:{
+    screen:SupportScreen,
+    navigationOptions:({navigation})=>({
+      title: 'F-Cube Digital Support ',
+      headerLeft:()=><NavigationDrawerHeader navigationProps={navigation}  />,
+      headerStyle: {
+        backgroundColor: '#282828',
+      },
+      headerTintColor: '#fff',
+
+    }),
+  }
+});
+
 const DrawerNavigation = createDrawerNavigator(
     {
 
@@ -381,6 +397,10 @@ const DrawerNavigation = createDrawerNavigator(
         screen:TransactionStack,
         navigationOptions:{drawerLabel:"Transaction History"},
         
+      },
+      SupportScreen:{
+        screen:SupportStack,
+        navigationOptions:{drawerLabel:"Support "}
       },
 
       BuydataScreen:{
