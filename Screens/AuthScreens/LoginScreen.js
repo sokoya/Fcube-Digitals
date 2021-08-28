@@ -23,6 +23,7 @@ import {
 } from '../../Redux/Actions/Athentication.action';
 import {ValidateEmptyField} from '../../_helper/Validation';
 import SuccessAlert from '../../Component/SuccessAlert';
+import MonthSelectorCalendar from 'react-native-month-selector'; //add this import line
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -55,6 +56,7 @@ class LoginScreen extends Component {
     userPassword: '',
     ErrorMgs: '',
     passwordError: '',
+    month:Date,
   };
 
   showpassword = () => {
@@ -115,6 +117,8 @@ class LoginScreen extends Component {
       <View style={styles.mainBody}>
         <Loader message="Logging You In" loading={this.props.loading} />
 
+
+     
         <Text style={{color: 'red', fontSize: 14, textAlign: 'center'}}>
           {' '}
           {this.props.errortext}{' '}

@@ -1,8 +1,8 @@
 //Import React
-import React, {useState} from 'react';
+import React, {useState, useCallback } from 'react';
 import {widthPercentageToDP as wp ,  heightPercentageToDP as hp} from 'react-native-responsive-screen'
 //Import all required component
-import { View, Text,TextInput,Keyboard, TouchableOpacity,StyleSheet } from 'react-native';
+import { View, Text,TextInput,Keyboard, TouchableOpacity,StyleSheet,  SafeAreaView } from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 //import { useDispatch, useSelector } from 'react-redux';
 //import { UpdateUserPassword } from '../../Redux/Actions/Athentication.action';
@@ -13,8 +13,36 @@ import { ValidateEmptyField, ValidatePassword } from '../../_helper/Validation';
 import { changepassword } from '../../Redux/Actions/Athentication.action';
 import Loader from '../../Component/Loader';
 import AsyncStorage from '@react-native-community/async-storage';
+
+import MonthPicker from 'react-native-month-year-picker';
 const ChangepasswordScreen = (props) => {
 
+  const [date, setDate] = useState(new Date());
+  const [show, setShow] = useState(false);
+  const[bd,setbd] = useState(new Date());
+
+  const showPicker = useCallback((value) => setShow(value), []);
+
+  const onValueChange = useCallback(
+    (event, newDate) => {
+      const selectedDate = newDate || date;
+
+      showPicker(false);
+    
+      setDate(selectedDate);
+    },
+    [date, showPicker],
+  );
+
+  const getParsedDate = (date) =>{
+    date = String(date).split(' ');
+    var year = String(date[3])
+    var month = String(date[1])
+  var result = (month + "-"+ year);
+ return result;
+  }
+
+  console.log(getParsedDate(date))
   let [oldPassword, setoldPassword] = useState('');
   let [newPassword, setnewPassword] = useState('');
   let [confirmPassword, setconfirmPassword] = useState('');
@@ -80,6 +108,22 @@ const    Hide= ()=>{
   return (
     <View style={styles.mainBody}>
 
+
+<SafeAreaView>
+      <Text>Month Year Picker Example</Text>
+      
+      <TouchableOpacity onPress={() => showPicker(true)}>
+        <Text>OPEN {getParsedDate(date)}</Text>
+      </TouchableOpacity>
+      {show && (
+        <MonthPicker
+          onChange={onValueChange}
+          value={date}
+        
+         
+        />
+      )}
+    </SafeAreaView>
 <Loader message="Updating Your Security Settings " loading={loading}/>
 
       
